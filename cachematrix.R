@@ -3,13 +3,25 @@
 
 ## Write a short comment describing this function
 
-makeCacheMatrix <- function(x = matrix()) {
-
+makeCacheMatrix <- function(x = matrix(sample(1:100,9),3,3)) {
+  emaminv <- NULL
+  set <- function(y) {
+    x <<- y
+    emaminv <<- NULL
+  }
+  get <- function() {x}
+  setinverse <- function(inverse) {emaminv <<-inverse}
+  getinverse <- function() {emaminv}
+  list(set = set, get = get, setinverse = setinverse , getinverse = getinverse)
 }
-
-
-## Write a short comment describing this function
-
 cacheSolve <- function(x, ...) {
-        ## Return a matrix that is the inverse of 'x'
+  emaminv <- x$getinverse()
+  if(!is.null(emaminv)) {
+    message("getting cashed data")
+    return(emaminv)
+  }
+  mat <- x$get()
+  emaminv <- solve(mat, ...)
+  x$setinverse(emaminv)
+  emaminv
 }
